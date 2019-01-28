@@ -13,7 +13,6 @@ protocol ChartLoadingTrackingDelegate: class {
     func chartDidFailLoadingWithError(_ error: Error, elapsedTimes: [ChartLoadingElapsedTime], for url: String)
 }
 
-
 enum ChartLoadingState {
     case start(Date)
     case commit(Date)
