@@ -28,10 +28,10 @@ open class Study: NSObject, NSCoding {
     }
     
     required public init(coder aDecoder: NSCoder) {
-        if let decodedShortName = aDecoder.decodeObject(forKey: "shortName") as? String {
-            self.shortName = decodedShortName
+        if let formerType = aDecoder.decodeObject(forKey: "type") as? String {
+            self.shortName = formerType
         } else {
-            self.shortName = aDecoder.decodeObject(forKey: "type") as? String ?? "emptyShortname"
+            self.shortName = aDecoder.decodeObject(forKey: "shortName") as? String ?? "emptyShortname"
         }
         self.name = aDecoder.decodeObject(forKey: "name") as? String ?? "emptyName"
         self.inputs = aDecoder.decodeObject(forKey: "inputs") as? [String: Any]
