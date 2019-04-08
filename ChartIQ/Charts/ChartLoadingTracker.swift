@@ -10,7 +10,7 @@ import Foundation
 
 protocol ChartLoadingTrackingDelegate: class {
     func chartDidFinishLoading(elapsedTimes: [ChartLoadingElapsedTime])
-    func chartDidFailLoadingWithError(_ error: ChartLoadingError, elapsedTimes: [ChartLoadingElapsedTime], for url: String)
+    func chartDidFailLoadingWithError(_ error: ChartLoadingError, elapsedTimes: [ChartLoadingElapsedTime])
 }
 
 
@@ -69,16 +69,28 @@ extension Array where Element == ChartLoadingElapsedTime {
     }
 }
 
-public enum ChartLoadingError: Error {
-    case navigation(Error)
-    case provisionalNavigation(Error)
-    case contentProcessDidTerminate
-    case internalError(String)
+public struct ChartLoadingError: Error {
+    enum `Type` {
+        case navigation(Error)
+        case provisionalNavigation(Error)
+        case contentProcessDidTerminate
+        case internalError(String?)
+    }
+    let url: String
+    let chartVersion: String
+    let type: Type
+
+    // undefined until we communicate the chart version from the JS code
+    init(url: String, chartVersion: String = "undefined", type: Type) {
+        self.url = url
+        self.chartVersion = chartVersion
+        self.type = type
+    }
 }
 
 extension ChartLoadingError: LocalizedError {
     public var errorDescription: String? {
-        switch self {
+        switch type {
         case .navigation:
             return "navigation"
         case .provisionalNavigation:
@@ -86,7 +98,7 @@ extension ChartLoadingError: LocalizedError {
         case .contentProcessDidTerminate:
             return "content process terminated"
         case .internalError(let message):
-            return "internal error \(message)"
+            return "internal error \(message ?? "unknown")"
         }
     }
 }
@@ -151,9 +163,9 @@ class ChartLoadingTracker {
         delegate?.chartDidFinishLoading(elapsedTimes: elapsedTimes)
     }
     
-    func failed(with error: ChartLoadingError, for url: String) {
+    func failed(with error: ChartLoadingError) {
         state = .failed(error)
-        delegate?.chartDidFailLoadingWithError(error, elapsedTimes: elapsedTimes, for: url)
+        delegate?.chartDidFailLoadingWithError(error, elapsedTimes: elapsedTimes)
     }
     
 }
