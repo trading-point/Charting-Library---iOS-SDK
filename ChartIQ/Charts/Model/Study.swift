@@ -28,6 +28,9 @@ open class Study: NSObject, NSCoding {
     }
     
     required public init(coder aDecoder: NSCoder) {
+        //We have to check "type" first, which is the former "shortName" of study, cause if exists this means that the user has added some studies with the "type" field.
+        //Previously we feeded the study's shortName as name. So in time this has to be deprecated.
+        //Now shortName is the proper field that ChartIQ expects so it can find the proper Study.
         if let formerType = aDecoder.decodeObject(forKey: "type") as? String {
             self.shortName = formerType
         } else {
