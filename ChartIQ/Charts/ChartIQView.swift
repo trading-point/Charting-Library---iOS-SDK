@@ -255,6 +255,7 @@ public class ChartIQView: UIView {
     internal var webView: WKWebView!
     
     var loadingTracker: ChartLoadingTracker?
+    var contentProcessDidTerminateTotalErrors: Int = 0
     
     static internal var url = ""
     static internal var refreshInterval = 0
@@ -1897,7 +1898,8 @@ extension ChartIQView : WKNavigationDelegate {
     }
     
     public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-       let loadingError = ChartLoadingError(url: chartIQUrl, type: .contentProcessDidTerminate)
+        contentProcessDidTerminateTotalErrors += 1
+        let loadingError = ChartLoadingError(url: chartIQUrl, type: .contentProcessDidTerminate(retries: contentProcessDidTerminateTotalErrors))
         loadingTracker?.failed(with: loadingError)
     }
 }

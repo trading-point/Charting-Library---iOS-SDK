@@ -73,7 +73,7 @@ public struct ChartLoadingError: Error {
     enum `Type` {
         case navigation(Error)
         case provisionalNavigation(Error)
-        case contentProcessDidTerminate
+        case contentProcessDidTerminate(retries: Int)
         case internalError(String?)
     }
     let url: String
