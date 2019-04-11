@@ -148,6 +148,13 @@ public protocol ChartIQDelegate
     ///   - chartIQView: The ChartIQView Object
     ///   - error: Error Code
     @objc func chartIQViewDidReceiveError(_ chartIQView: ChartIQView, errorCode error: ChartIQErrorHandler)
+    
+    /// Called when an update on height happens in ChartIQ
+    ///
+    /// - Parameters:
+    ///   - chartIQView: The ChartIQView Object
+    ///   - height: The Chart container height to be logged
+    @objc func chartIQView(_ chartIQView: ChartIQView, didUpdateHeight height: CGFloat)
 }
 
 /// ChartIQ Custom XM Error Handler
@@ -409,7 +416,7 @@ public class ChartIQView: UIView {
         }
     }
     
-    fileprivate enum ChartIQCallbackMessage: String {
+    fileprivate enum ChartIQCallbackMessage: String, CaseIterable {
         case newSymbol = "newSymbolCallbackHandler"
         case pullInitialData = "pullInitialDataHandler"
         case pullUpdateData = "pullUpdateDataHandler"
@@ -427,6 +434,7 @@ public class ChartIQView: UIView {
         case errorHandler = "error"
         case loadingChartFailed = "loadingChartFailed"
         case loadingChartSuccess = "loadingChartSuccess"
+        case chartHeight = "chartHeight"
     }
     
     internal static var isValidApiKey = false
@@ -466,23 +474,9 @@ public class ChartIQView: UIView {
     /// Cleans up the message handlers in order to avoid a memory leak.
     /// Should be called when the view is about to get deallocated (e.g. the deinit of its superview)
     public func cleanup() {
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.accessibility.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.newSymbol.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.pullInitialData.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.pullUpdateData.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.pullPaginationData.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.layout.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.drawing.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.log.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.deletedStudy.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.userTapOnChartScreen.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.userMovedChartScreen.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.drawingAdded.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.drawingEdited.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.drawingRemoved.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.errorHandler.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.loadingChartFailed.rawValue)
-        webView.configuration.userContentController.removeScriptMessageHandler(forName: ChartIQCallbackMessage.loadingChartSuccess.rawValue)
+        for callbackMessage in ChartIQCallbackMessage.allCases {
+            webView.configuration.userContentController.removeScriptMessageHandler(forName: callbackMessage.rawValue)
+        }
     }
     
     /// Sets your ROKO Mobi api id and url here.
@@ -709,23 +703,9 @@ public class ChartIQView: UIView {
         userContentController.addUserScript(drawingScript)
         userContentController.addUserScript(observeStudyDeletion)
         
-        userContentController.add(self, name: ChartIQCallbackMessage.accessibility.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.newSymbol.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.pullInitialData.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.pullUpdateData.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.pullPaginationData.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.layout.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.drawing.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.log.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.deletedStudy.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.userTapOnChartScreen.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.userMovedChartScreen.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.drawingAdded.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.drawingEdited.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.drawingRemoved.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.errorHandler.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.loadingChartFailed.rawValue)
-        userContentController.add(self, name: ChartIQCallbackMessage.loadingChartSuccess.rawValue)
+        for callbackMessage in ChartIQCallbackMessage.allCases {
+            userContentController.add(self, name: callbackMessage.rawValue)
+        }
         
         
         // Create the configuration with the user content controller
@@ -1846,6 +1826,12 @@ extension ChartIQView: WKScriptMessageHandler {
             loadingTracker?.failed(with: error)
         case .loadingChartSuccess:
             delegate?.chartIQViewDidDrawCandles(self)
+        case .chartHeight:
+            guard let message = message.body as? [String: Any],
+                let chartHeight = message["chartHeight"] as? CGFloat else {
+                    return
+            }
+            delegate?.chartIQView(self, didUpdateHeight: chartHeight)
         }
     }
 }
