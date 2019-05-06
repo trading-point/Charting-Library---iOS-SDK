@@ -12,6 +12,7 @@ import WebKit
 
 extension WKWebView {
     func evaluateJavaScriptWithReturn(_ javaScriptString: String) -> String? {
+        guard !self.isLoading else { return nil }
         var finished = false
         var jsValue: String?
         

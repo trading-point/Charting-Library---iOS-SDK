@@ -752,13 +752,13 @@ public class ChartIQView: UIView {
         _dataMethod = method
         addEvent("CHIQ_setDataMethod", parameters: ["method": method == .pull ? "PULL" : "PUSH"])
         let script = "determineOs()"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         if method == .pull {
             let script = "attachQuoteFeed(\(ChartIQView.refreshInterval))";
-            webView.evaluateJavaScript(script, completionHandler: nil)
+            xmEvaluateJavascript(script, completionHandler: nil)
         } else {
             let script = "callNewChart(); "
-            webView.evaluateJavaScript(script, completionHandler: nil)
+            xmEvaluateJavascript(script, completionHandler: nil)
         }
     }
     
@@ -783,7 +783,7 @@ public class ChartIQView: UIView {
         case .colored_mountain: chartType  = "colored_mountain"
         }
         let script = "setChartType(\"\(chartType)\");"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setChartType", parameters: ["chartType": chartType])
         addEvent("CHIQ_setAggregationType", parameters: ["aggregationType": ""])
     }
@@ -803,7 +803,7 @@ public class ChartIQView: UIView {
         case .renko: aggregationType = "renko"
         }
         let script = "setAggregationType(\"\(chartType)\");"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setAggregationType", parameters: ["aggregationType": aggregationType])
         addEvent("CHIQ_setChartType", parameters: ["chartType": "candle"])
     }
@@ -819,7 +819,7 @@ public class ChartIQView: UIView {
         if Int(interval) == nil {
             _interval = "\"" + interval + "\""
         }
-        webView.evaluateJavaScript("setPeriodicity(\(period), \(_interval), \"\(timeUnit)\");", completionHandler: nil)
+        xmEvaluateJavascript("setPeriodicity(\(period), \(_interval), \"\(timeUnit)\");", completionHandler: nil)
         addEvent("CHIQ_setPeriodicity", parameters: ["period": String(period), "interval": interval])
     }
     
@@ -830,11 +830,11 @@ public class ChartIQView: UIView {
     public func setSymbol(_ symbol: String) {
         if(UIAccessibility.isVoiceOverRunning) {
             let source = "accessibilityMode();"
-            webView.evaluateJavaScript(source, completionHandler: nil)
+            xmEvaluateJavascript(source, completionHandler: nil)
         }
         
         let script = "callNewChart(\"\(symbol)\");"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setSymbol", parameters: ["symbol": symbol])
     }
     
@@ -848,7 +848,7 @@ public class ChartIQView: UIView {
         """
         xm_callNewChart("\(symbol)", \(period), "\(interval)")
         """
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /*! Sets the webpage contents and base URL.
@@ -866,7 +866,7 @@ public class ChartIQView: UIView {
     ///   - timezoneIANAIdentifier: The identifier of the timezone in IANA format
     public func setDisplayedDataTimezone(withTimezoneIANAIdentifier timezoneIANAIdentifier: String) {
         let script = "setDisplayedDataTimezone(\"\(timezoneIANAIdentifier)\");"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Used to add a Drawing to the Chart, in Edit Mode
@@ -875,7 +875,7 @@ public class ChartIQView: UIView {
     ///   - name: The string name of the Drawing we want to add
     public func xm_AddDrawing(name: String) {
         let script = "addDrawing(\"\(name)\")";
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Used to edit a Drawing to the Chart, If its not in the visible area will scroll to its position
@@ -884,7 +884,7 @@ public class ChartIQView: UIView {
     ///   - id: The id of the Drawing we want to edit in chart, its the timestamp of the when the drawing was added
     public func xm_EditDrawing(id: Double) {
         let script = "editDrawing(\(id))";
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Used to remove a Drawing to the Chart, If its not in the visible area will be just removed
@@ -893,40 +893,40 @@ public class ChartIQView: UIView {
     ///   - id: The id of the Drawing we want to edit in chart, its the timestamp of the when the drawing was added
     public func xm_RemoveDrawing(id: Double) {
         let script = "removeDrawing(\(id))";
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Used to invoke Javascript code for debugging
     public func xm_doSomething() {
         let script = "doSomething()";
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Used to print debug info in Javascript console
     public func xm_printSomething(text: String) {
         let script = "printSomething(\"\(text)\")";
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Used to show all the hidden Studies from the chart.
     public func showStudies() {
         let script = "showStudies()";
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     /// Used to hide all the available Studies from the chart.
     public func hideStudies() {
         let script = "hideStudies()";
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     /// Used to show all the hidden Drawings from the chart.
     public func showDrawings() {
         let script = "showDrawings()";
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     /// Used to hide all the available Drawings from the chart.
     public func hideDrawings() {
         let script = "hideDrawings()";
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Displays or not the chart objects like Drawings and Studies all together.
@@ -935,7 +935,7 @@ public class ChartIQView: UIView {
     ///   - show: Boolean value to determine weather to show or not the Study/Drawing objects
     public func displayChartComponents(_ show: Bool) {
         let script = "displayChartComponents(\(show))"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Renders a chart for a particular instrument from the data passed in or fetches new data from the attached CIQ.QuoteFeed. This is the method that should be called every time a new chart needs to be drawn for a different instrument.
@@ -945,7 +945,7 @@ public class ChartIQView: UIView {
     public func setSymbolObject(_ object: Symbol) {
         let script =
         "stxx.newChart(\"\(symbol)\", \(dataMethod == .pull ? "null" : "[]"), null, \(dataMethod == .pull ? "function() { webkit.messageHandlers.newSymbolCallbackHandler.postMessage(\"\(symbol)\"); } " : "null"),  {periodicity:{period:\(periodicity),interval:\(jsInterval)}}); "
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setSymbolObject", parameters: ["symbolObject.symbol": object.symbol])
     }
     
@@ -957,7 +957,7 @@ public class ChartIQView: UIView {
     public func addComparisonSymbol(_ symbol: String, color: UIColor = UIColor.red) {
         let addSeriesScript = "stxx.addSeries(\"\(symbol)\", {display:\"\(symbol)\", color: \"\(color.toHexString())\"  isComparison:true});"
         
-        webView.evaluateJavaScript(addSeriesScript, completionHandler: nil)
+        xmEvaluateJavascript(addSeriesScript, completionHandler: nil)
         addEvent("CHIQ_addComparison", parameters: ["symbol": symbol])
     }
     
@@ -966,7 +966,7 @@ public class ChartIQView: UIView {
     /// - Parameter symbol: The symbol for the new chart - a symbol string
     public func removeComparisonSymbol(_ symbol: String) {
         let script = "stxx.removeSeries(\"\(symbol)\");"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_removeComparison", parameters: ["symbol": symbol])
     }
     
@@ -980,7 +980,7 @@ public class ChartIQView: UIView {
         case .linear: scaleString = "linear"
         }
         let script = "stxx.layout.chartScale = \"\(scaleString)\";"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setChartScale", parameters: ["scale": scaleString])
     }
     
@@ -992,7 +992,7 @@ public class ChartIQView: UIView {
     ///   - value: The value to assign to the attribute
     public func changeChartStyle(_ obj: String, attribute: String, value: String) {
         let script = "stxx.setStyle(\"\(obj)\",\"\(attribute)\",\"\(value)\");"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_changeChartStyle", parameters: ["obj": obj, "attribute": attribute, "value": value])
     }
     
@@ -1010,7 +1010,7 @@ public class ChartIQView: UIView {
         }
         script += "stxx.clearStyles();"
         
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Set watermark
@@ -1026,7 +1026,7 @@ public class ChartIQView: UIView {
             script = "setWatermark(false);"
         }
         
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Set decimal places
@@ -1035,7 +1035,7 @@ public class ChartIQView: UIView {
     ///   - decimalPlaces: number of decimal places
     public func setDecimalPlaces(_ decimalPlaces: Int) {
         let script = "stxx.chart.yAxis.decimalPlaces=\(decimalPlaces);"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Change a property value on the chart
@@ -1045,7 +1045,7 @@ public class ChartIQView: UIView {
     ///   - value: The value to assign to the property
     public func setChartProperty(_ property: String, value: Any) {
         let script = "stxx.chart.\(property) = \"\(value)\";"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_changeChartProperty", parameters: ["property": property, "value": value as! String])
     }
     
@@ -1066,7 +1066,7 @@ public class ChartIQView: UIView {
     ///   - value: The value to assign to the property
     public func setEngineProperty(_ property: String, value: Any) {
         let script = "stxx.\(property) = \"\(value)\";"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_changeEngineProperty", parameters: ["property": property, "value": value as! String])
     }
     
@@ -1083,14 +1083,14 @@ public class ChartIQView: UIView {
     /// Turns crosshairs on
     public func enableCrosshairs() {
         let script = "enableCrosshair();"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_enableCrosshairs")
     }
     
     /// Turns crosshairs off
     public func disableCrosshairs() {
         let script = "disableCrosshair();"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_disableCrosshairs")
     }
     
@@ -1120,17 +1120,17 @@ public class ChartIQView: UIView {
     /// valid values: day, night, none
     ///
     public func setTheme(_ theme: String) {
-        webView.evaluateJavaScript("setTheme(\"\(theme)\");")
+        xmEvaluateJavascript("setTheme(\"\(theme)\");")
     }
     
     public func resizeChart() {
-        webView.evaluateJavaScript("resizeScreen();", completionHandler: nil)
+        xmEvaluateJavascript("resizeScreen();", completionHandler: nil)
     }
     
     /// Clears out a chart, eliminating all references including the resizeTimer, quoteDriver, styles and eventListeners
     public func clear() {
         let script = "stxx.destroy();"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_clearChart")
     }
     
@@ -1147,7 +1147,7 @@ public class ChartIQView: UIView {
         let jsonString = String(data: jsonData, encoding: .utf8)
         let script =
         "callNewChart(\"\", \(jsonString!)); "
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         //        addEvent("CHIQ_pushInitialData", parameters: ["symbol": symbol, "data": jsonString!])
     }
     
@@ -1159,7 +1159,7 @@ public class ChartIQView: UIView {
         let jsonData = try! JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted)
         let jsonString = String(data: jsonData, encoding: .utf8)?.replacingOccurrences(of: "\n", with: "") ?? ""
         let script = "parseData('\(jsonString)');"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         //        addEvent("CHIQ_pushUpdate", parameters: ["symbol": symbol, "data": jsonString])
     }
     
@@ -1171,7 +1171,7 @@ public class ChartIQView: UIView {
         shouldDrawAskLineFunction(\(shouldShow));
         stxx.draw();
         """
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Uses this method to feed the chart with the ask price
@@ -1183,7 +1183,7 @@ public class ChartIQView: UIView {
         drawAskLine(\(askPrice));
         stxx.draw();
         """
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     // MARK: - Study
@@ -1191,7 +1191,7 @@ public class ChartIQView: UIView {
     /// Gets all of the available studies.
     fileprivate func getStudyObjects(completionHandler: @escaping () -> Void) {
         let script = "JSON.stringify(getStudyList());"
-        webView.evaluateJavaScript(script) { [weak self](result, error) in
+        xmEvaluateJavascript(script) { [weak self](result, error) in
             guard let strongSelf = self else {
                 completionHandler()
                 return
@@ -1278,7 +1278,7 @@ public class ChartIQView: UIView {
     ///   - value: The value
     public func setStudy(_ name: String, withParameter key: String, value: String) {
         let script = "setStudy(\"\(name)\", \"\(key)\", \"\(value)\")"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setStudyParameter", parameters: ["parameter": key, "value": value])
     }
     
@@ -1301,7 +1301,7 @@ public class ChartIQView: UIView {
         
         script += "helper.updateStudy({inputs:newInputParameters, outputs:newOutputParameters}); "
         
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Adds study on the Chart.
@@ -1336,7 +1336,7 @@ public class ChartIQView: UIView {
         }
         
         let script = "addStudy('\(name)', \(_inputs), \(_outputs));"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_addStudy", parameters: ["studyName": name])
     }
     
@@ -1345,14 +1345,14 @@ public class ChartIQView: UIView {
     /// - Parameter name: The study name
     public func removeStudy(_ name: String) {
         let script = "removeStudy('\(name)');"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_removeStudy")
     }
     
     /// Remove all studies from the Chart.
     public func removeAllStudies() {
         let script = "removeAllStudies();"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Lists studies added on the Chart.
@@ -1409,7 +1409,7 @@ public class ChartIQView: UIView {
     
     public func importDrawings(_ jsonString: String) {
         let script = "stxx.importXMDrawings(\(jsonString)); stxx.draw();"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Gets current draw tool
@@ -1473,7 +1473,7 @@ public class ChartIQView: UIView {
         let script =
             "currentDrawing = \"\(getDrawToolName(for: tool))\"; " +
         "stxx.changeVectorType(currentDrawing); "
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_enableDrawing")
     }
     
@@ -1497,7 +1497,7 @@ public class ChartIQView: UIView {
     public func setDrawing(withParameter key: String, value: Any) {
         let script =
         "stxx.currentVectorParameters.\(key) = \(value is String ? "\"\(value)\"" : value); "
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setDrawingParameter", parameters: ["parameter": key, "value": String(describing: value)])
     }
     
@@ -1505,13 +1505,13 @@ public class ChartIQView: UIView {
     public func disableDrawing() {
         let script = "stxx.changeVectorType(null); " +
         "currentDrawing = \"\" ; "
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Clears drawing on the chart.
     public func clearDrawing() {
         let script = "stxx.clearDrawings();"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     public func invoke(functionName: String, args: Any...) -> Any {
@@ -1544,7 +1544,7 @@ public class ChartIQView: UIView {
     /// Uses this method to load the default ChartIQView setting
     fileprivate func loadDefaultSetting() {
         let script = "stxx.layout.chartScale = \"log\";"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Uses this method to generate the javascript of updating study parameter
@@ -1603,7 +1603,7 @@ public class ChartIQView: UIView {
         let data = try! JSONSerialization.data(withJSONObject: data.map{ $0.toDictionary()}, options: .prettyPrinted)
         let json = String(data: data, encoding: .utf8)?.replacingOccurrences(of: "\n", with: "") ?? ""
         let script = "parseData('\(json)', \"\(cb)\");"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        xmEvaluateJavascript(script, completionHandler: nil)
     }
     
     /// Uses this method to format object to printed JSON format
@@ -1897,5 +1897,12 @@ extension ChartIQView: ChartLoadingTrackingDelegate {
     
     func chartDidFailLoadingWithError(_ error: ChartLoadingError, elapsedTimes: [ChartLoadingElapsedTime]) {
         loadingDelegate?.chartIQView(self, didFailLoadingWithError: error, elapsedTimes: elapsedTimes)
+    }
+}
+
+extension ChartIQView {
+    private func xmEvaluateJavascript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
+        guard !webView.isLoading else { return }
+        webView.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
 }
