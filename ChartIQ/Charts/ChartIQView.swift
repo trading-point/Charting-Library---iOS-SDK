@@ -1906,3 +1906,23 @@ extension ChartIQView {
         webView.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
 }
+
+extension ChartIQView {
+    public func xm_disableWebViewScrolling() {
+        let jsDisableWebViewString = "stxx.allowScroll = false"
+        xmEvaluateJavascript(jsDisableWebViewString, completionHandler: { (_, error) in
+            if let error = error {
+                print("Error while disabling chart scrolling: \(error)")
+            }
+        })
+    }
+
+    public func xm_enableWebViewScrolling() {
+        let jsEnableWebViewString = "stxx.allowScroll = true"
+        xmEvaluateJavascript(jsEnableWebViewString, completionHandler: { (_, error) in
+            if let error = error {
+                print("Error while enabling chart scrolling: \(error)")
+            }
+        })
+    }
+}
