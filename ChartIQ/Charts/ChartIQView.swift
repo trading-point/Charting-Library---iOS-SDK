@@ -155,6 +155,18 @@ public protocol ChartIQDelegate
     ///   - chartIQView: The ChartIQView Object
     ///   - height: The Chart container height to be logged
     @objc func chartIQView(_ chartIQView: ChartIQView, didUpdateHeight height: CGFloat)
+    
+    /// Called when scroll or zoom of Y-AXIS happens in ChartIQ
+    ///
+    /// - Parameters:
+    ///   - chartIQView: The ChartIQView Object
+    @objc func chartIQViewDidStartTouchOnYAxis(_ chartIQView: ChartIQView)
+    
+    /// Called when scroll or zoom of Y-AXIS ends in ChartIQ
+    ///
+    /// - Parameters:
+    ///   - chartIQView: The ChartIQView Object
+    @objc func chartIQViewDidEndTouchOnYAxis(_ chartIQView: ChartIQView)
 }
 
 /// ChartIQ Custom XM Error Handler
@@ -435,6 +447,8 @@ public class ChartIQView: UIView {
         case loadingChartFailed = "loadingChartFailed"
         case loadingChartSuccess = "loadingChartSuccess"
         case chartHeight = "chartHeight"
+        case touchStartedOnYAxis = "touchStartedOnYAxis"
+        case touchEndedOnYAxis = "touchEndedOnYAxis"
     }
     
     internal static var isValidApiKey = false
@@ -1832,6 +1846,10 @@ extension ChartIQView: WKScriptMessageHandler {
                     return
             }
             delegate?.chartIQView(self, didUpdateHeight: chartHeight)
+        case .touchStartedOnYAxis:
+            delegate?.chartIQViewDidStartTouchOnYAxis(self)
+        case .touchEndedOnYAxis:
+            delegate?.chartIQViewDidEndTouchOnYAxis(self)
         }
     }
 }
@@ -1904,5 +1922,25 @@ extension ChartIQView {
     private func xmEvaluateJavascript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         guard !webView.isLoading else { return }
         webView.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+    }
+}
+
+extension ChartIQView {
+    public func xm_disableWebViewScrolling() {
+        let jsDisableWebViewString = "stxx.allowScroll = false"
+        xmEvaluateJavascript(jsDisableWebViewString, completionHandler: { (_, error) in
+            if let error = error {
+                print("Error while disabling chart scrolling: \(error)")
+            }
+        })
+    }
+    
+    public func xm_enableWebViewScrolling() {
+        let jsEnableWebViewString = "stxx.allowScroll = true"
+        xmEvaluateJavascript(jsEnableWebViewString, completionHandler: { (_, error) in
+            if let error = error {
+                print("Error while enabling chart scrolling: \(error)")
+            }
+        })
     }
 }
