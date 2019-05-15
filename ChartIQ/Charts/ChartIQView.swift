@@ -1934,7 +1934,6 @@ extension ChartIQView {
             }
         })
     }
-    
     public func xm_enableWebViewScrolling() {
         let jsEnableWebViewString = "stxx.allowScroll = true"
         xmEvaluateJavascript(jsEnableWebViewString, completionHandler: { (_, error) in
