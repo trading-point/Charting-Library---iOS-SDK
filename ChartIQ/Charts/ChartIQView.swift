@@ -19,7 +19,7 @@ public protocol ChartIQLoadingDelegate: class {
     ///   - chartIQView: The ChartIQView Object
     ///   - elapsedTimes: The elapsed times for all loading stages
     func chartIQView(_ chartView: ChartIQView, didFinishLoadingWithElapsedTimes elapsedTimes: [ChartLoadingElapsedTime])
-    
+
     /// Called when the chart failed to load
     ///
     /// - Parameters:
@@ -39,21 +39,21 @@ public protocol ChartIQDataSource
     ///   - params: The ChartIQQuoteFeedParams
     ///   - completionHandler: The Completion Handler
     func pullInitialData(by params: ChartIQQuoteFeedParams, completionHandler: @escaping ([ChartIQData]) -> Void)
-    
+
     /// Called when chart pull update data
     ///
     /// - Parameters:
     ///   - params: The ChartIQQuoteFeedParams
     ///   - completionHandler: The Completion Handler
     func pullUpdateData(by params: ChartIQQuoteFeedParams, completionHandler: @escaping ([ChartIQData]) -> Void)
-    
+
     /// Called when chart pull pagination data
     ///
     /// - Parameters:
     ///   - params: The ChartIQQuoteFeedParams
     ///   - completionHandler: The Completion Handler
     func pullPaginationData(by params: ChartIQQuoteFeedParams, completionHandler: @escaping ([ChartIQData]) -> Void)
-    
+
 }
 
 @objc(ChartIQDelegate)
@@ -64,34 +64,34 @@ public protocol ChartIQDelegate
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     @objc func chartIQViewDidFinishLoading(_ chartIQView: ChartIQView)
-    
+
     /// Called when the ChartIQ has drawn candles
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     @objc func chartIQViewDidDrawCandles(_ chartIQView: ChartIQView)
-    
+
     /// Called when the symbol changes
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - symbol: The symbol name
     @objc optional func chartIQView(_ chartIQView: ChartIQView, didUpdateSymbol symbol: String)
-    
+
     /// Called when the layout changes
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - layout: The layout infomation
     @objc optional func chartIQView(_ chartIQView: ChartIQView, didUpdateLayout layout: Any)
-    
+
     /// Called when a drawing is added or deleted (all the drawings are returned, not just the new one)
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - drawings: The drawing objects in JSON format
     @objc optional func chartIQView(_ chartIQView: ChartIQView, didUpdateDrawing drawings: Any)
-    
+
     /// Called when javascript produces a log type (log, error, warn)
     ///
     /// - Parameters:
@@ -100,73 +100,73 @@ public protocol ChartIQDelegate
     ///   - message: The actual string message that comes from JS
     ///   - chartIQVersion: The commit hash of the ChartIQ
     @objc func chartIQView(_ chartIQView: ChartIQView, didReceiveProxyLogging type: ChartIQProxyLoggerType, message: String, chartIQVersion: String)
-    
+
     /// Called when a user deletes a Study from the ChartIQ
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - name: The name of the study that is deleted
     @objc func chartIQView(_ chartIQView: ChartIQView, didDeleteStudy name: String)
-    
+
     /// Called when a user taps on the screen and we receive a callback from JS that the user tapped the chart from an inactive area. Definition of Active Area: Crosshair enabled, Drawing on highlight/edit mode.
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     @objc func chartIQViewDidTapOnChart(_ chartIQView: ChartIQView)
-    
+
     /// Called when a user drags the screen and we receive a callback from JS that the user moved the chart from an inactive area. Definition of Active Area: Crosshair enabled, Drawing on highlight/edit mode.
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     @objc func chartIQViewDidMoveChart(_ chartIQView: ChartIQView)
-    
-    
+
+
     /// Called when a drawing is added in the Chart
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - drawing: The Drawing that was added in Chart
     @objc func chartIQViewDidAddDrawing(_ chartIQView: ChartIQView, didAddDrawing drawing: Any)
-    
+
     /// Called when a drawing is added in the Chart
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - drawing: The Drawing that was edited in Chart
     @objc func chartIQViewDidEditDrawing(_ chartIQView: ChartIQView, didEditDrawing drawing: Any)
-    
+
     /// Called when a drawing is added in the Chart
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - drawing: The Drawing that was removed from the Chart
     @objc func chartIQViewDidRemoveDrawing(_ chartIQView: ChartIQView, didRemoveDrawing drawing: Any)
-    
+
     /// Called when a drawing is added in the Chart
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - error: Error Code
     @objc func chartIQViewDidReceiveError(_ chartIQView: ChartIQView, errorCode error: ChartIQErrorHandler)
-    
+
     /// Called when an update on height happens in ChartIQ
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - height: The Chart container height to be logged
     @objc func chartIQView(_ chartIQView: ChartIQView, didUpdateHeight height: CGFloat)
-    
+
     /// Called when scroll or zoom of Y-AXIS happens in ChartIQ
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
-    @objc func chartIQViewDidStartTouchOnYAxis(_ chartIQView: ChartIQView)
-    
+    @objc func chartIQViewDidStartTouchOnPriceArea(_ chartIQView: ChartIQView)
+
     /// Called when scroll or zoom of Y-AXIS ends in ChartIQ
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
-    @objc func chartIQViewDidEndTouchOnYAxis(_ chartIQView: ChartIQView)
+    @objc func chartIQViewDidEndTouchOnPriceArea(_ chartIQView: ChartIQView)
 }
 
 /// ChartIQ Custom XM Error Handler
@@ -268,29 +268,29 @@ public enum ChartIQDrawingTool: Int {
 
 /// Chart that draw ChartIQ chart.
 public class ChartIQView: UIView {
-    
+
     // MARK: - Properties
-    
+
     internal var webView: WKWebView!
-    
+
     var loadingTracker: ChartLoadingTracker?
     var contentProcessDidTerminateTotalErrors: Int = 0
-    
+
     static internal var url = ""
     static internal var refreshInterval = 0
     static internal var voiceoverFields: [String: Bool] = [:]
-    
+
     public var chartIQUrl: String {
         return ChartIQView.url
     }
-    
+
     static internal var sdkVersion: String {
         if  let infos = Bundle(for: ChartIQView.self ).infoDictionary, let version = infos[kCFBundleVersionKey as String] as? String {
             return version
         }
         return ""
     }
-    
+
     /// Quote Fields
     public enum ChartIQQuoteFields: String {
         case date = "Date"
@@ -300,52 +300,52 @@ public class ChartIQView: UIView {
         case low = "Low"
         case volume = "Volume"
     }
-    
+
     static internal let rokoMobiEventUrl = URL(string:"https://api.roko.mobi/v1/events/")!
     static internal let rokoMobiSetUserUrl = "https://api.roko.mobi/v1/usersession/"
     static internal var customProperties = [String]()
     static internal var rokoMobiUser = ""
-    
+
     internal var _dataMethod: ChartIQDataMethod = .push
-    
+
     internal var drawingScript: WKUserScript {
         let source = "addDrawingListener();";
         return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
-    
+
     internal var layoutScript: WKUserScript {
         let source = "addLayoutListener()"
         return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
-    
+
     internal var observeStudyDeletion: WKUserScript {
         let source = "observeStudyDeletion()"
         return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
     }
-    
+
     internal var studyObjects = [Study]()
-    
+
     public var dataMethod: ChartIQDataMethod {
         return _dataMethod
     }
-    
+
     weak public var dataSource: ChartIQDataSource?
-    
+
     weak public var delegate: ChartIQDelegate?
     weak public var loadingDelegate: ChartIQLoadingDelegate?
-    
+
     public var isWebViewLoading: Bool {
         return webView.isLoading
     }
-    
+
     public var symbol: String {
         return webView.evaluateJavaScriptWithReturn("stxx.chart.symbol") ?? ""
     }
-    
+
     public var interval: String {
         return webView.evaluateJavaScriptWithReturn("stxx.layout.interval.toString()") ?? "day"
     }
-    
+
     internal var jsInterval: String {
         var _interval = webView.evaluateJavaScriptWithReturn("stxx.layout.interval.toString()") ?? "day"
         if Int(_interval) == nil {
@@ -353,18 +353,18 @@ public class ChartIQView: UIView {
         }
         return _interval
     }
-    
+
     public var timeUnit: String {
         return webView.evaluateJavaScriptWithReturn("stxx.timeUnit") ?? "minute"
     }
-    
+
     public var periodicity: Int {
         if let periodicityStr = webView.evaluateJavaScriptWithReturn("stxx.layout.periodicity.toString()"), let periodicity = Int(periodicityStr) {
             return periodicity
         }
         return 1
     }
-    
+
     public var chartType: ChartIQChartType {
         let _type = webView.evaluateJavaScriptWithReturn("stxx.layout.chartType")
         if _type == "line" {
@@ -397,7 +397,7 @@ public class ChartIQView: UIView {
             return .bar
         }
     }
-    
+
     public var aggregationType: ChartIQAggregationType? {
         let _type = webView.evaluateJavaScriptWithReturn("stxx.layout.aggregationType")
         if _type == "rangebars" {
@@ -418,7 +418,7 @@ public class ChartIQView: UIView {
             return nil
         }
     }
-    
+
     public var scale: ChartIQScale {
         let _scale = webView.evaluateJavaScriptWithReturn("stxx.layout.chartScale")
         if _scale == "log" {
@@ -427,7 +427,7 @@ public class ChartIQView: UIView {
             return .linear
         }
     }
-    
+
     fileprivate enum ChartIQCallbackMessage: String, CaseIterable {
         case newSymbol = "newSymbolCallbackHandler"
         case pullInitialData = "pullInitialDataHandler"
@@ -447,44 +447,44 @@ public class ChartIQView: UIView {
         case loadingChartFailed = "loadingChartFailed"
         case loadingChartSuccess = "loadingChartSuccess"
         case chartHeight = "chartHeight"
-        case touchStartedOnYAxis = "touchStartedOnYAxis"
-        case touchEndedOnYAxis = "touchEndedOnYAxis"
+        case touchStartedOnPriceArea = "touchStartedOnYAxis"
+        case touchEndedOPriceArea = "touchEndedOnYAxis"
     }
-    
+
     internal static var isValidApiKey = false
-    
+
     internal static var rokoMobiApiKey = ""
-    
+
     internal static var rokoMobiAuthorizaion = ""
-    
+
     internal static var disableAnalytics = false
-    
+
     internal static let serverError = NSError(domain:"Server error.", code:0, userInfo:nil)
-    
+
     internal static var carrierName: String {
         let networkInfo = CTTelephonyNetworkInfo()
         let carrier = networkInfo.subscriberCellularProvider
         return carrier?.carrierName ?? "Unknown"
     }
-    
+
     // MARK: - Initializers
-    
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         initialize()
     }
-    
+
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         initialize()
     }
-    
+
     internal func initialize() {
         setupWebView()
         NotificationCenter.default.addObserver(self, selector: #selector(ChartIQView.applicationWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ChartIQView.applicationDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
-    
+
     /// Cleans up the message handlers in order to avoid a memory leak.
     /// Should be called when the view is about to get deallocated (e.g. the deinit of its superview)
     public func cleanup() {
@@ -492,7 +492,7 @@ public class ChartIQView: UIView {
             webView.configuration.userContentController.removeScriptMessageHandler(forName: callbackMessage.rawValue)
         }
     }
-    
+
     /// Sets your ROKO Mobi api id and url here.
     ///
     /// - Parameters:
@@ -502,7 +502,7 @@ public class ChartIQView: UIView {
     public static func start(withAPIKey key: String, url: String) throws {
         ChartIQView.rokoMobiApiKey = key
         ChartIQView.url = url
-        
+
         if(key.isEmpty) {
             ChartIQView.disableAnalytics = true
             ChartIQView.isValidApiKey = true
@@ -510,7 +510,7 @@ public class ChartIQView: UIView {
             try ChartIQView.addInitEvent()
         }
     }
-    
+
     /// Sets your ROKO Mobi user
     ///
     /// - Parameters:
@@ -531,7 +531,7 @@ public class ChartIQView: UIView {
                 ChartIQView.rokoMobiUser = user
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let data = json["data"] as? [String: Any], let sessionKey = data["sessionKey"] as? String, let user = data["user"] as? [String: Any], let customProperties = user["customProperties"] as? [String: Any] {
-                        
+
                         ChartIQView.customProperties =  Array(customProperties.keys)
                         let url = URL(string: rokoMobiSetUserUrl + "bindApplicationSessionCmd")
                         var request = URLRequest(url: url!)
@@ -559,12 +559,12 @@ public class ChartIQView: UIView {
         }
         task.resume()
     }
-    
+
     // MARK: - ROKO Mobi Event
-    
+
     internal static func getROKOMobiRequestHeader() -> [String: String] {
-        
-        
+
+
         var headers = ["Content-Type": "application/json",
                        "X-ROKO-Mobi-Api-Key": ChartIQView.rokoMobiApiKey,
                        "X-ROKO-Mobi-Partner-Key": "chiq",
@@ -577,13 +577,13 @@ public class ChartIQView: UIView {
                        "X-ROKO-Mobi-Timezone": TimeZone.current.identifier,
                        "X-ROKO-Mobi-Network-Type": "WiFi"
         ]
-        
+
         if !ChartIQView.rokoMobiAuthorizaion.isEmpty {
             headers["Authorization"] = ChartIQView.rokoMobiAuthorizaion
         }
         return headers
     }
-    
+
     internal static func addInitEvent() throws {
         var request = URLRequest(url: rokoMobiEventUrl)
         request.allHTTPHeaderFields = ChartIQView.getROKOMobiRequestHeader()
@@ -611,7 +611,7 @@ public class ChartIQView: UIView {
             }
         }
     }
-    
+
     /// Adds the ROKO Mobi event
     ///
     /// - Parameters:
@@ -638,7 +638,7 @@ public class ChartIQView: UIView {
             task.resume()
         }
     }
-    
+
     /// Adds the ROKO Mobi user custom property
     ///
     /// - Parameters:
@@ -667,21 +667,21 @@ public class ChartIQView: UIView {
         }
         task.resume()
     }
-    
+
     // MARK: - Notification Handler
-    
+
     /// Handles UIApplicationWillResignActive notification
     @objc func applicationWillResignActive() {
         addEvent("_ROKO.Inactive User")
     }
-    
+
     /// Handles UIApplicationDidBecomeActive notification
     @objc func applicationDidBecomeActive() {
         addEvent("_ROKO.Active User")
     }
-    
+
     // MARK: - Helper
-    
+
     /// Sets chartIQ url
     ///
     /// - Parameter url: The chartIQ url
@@ -695,54 +695,54 @@ public class ChartIQView: UIView {
     public func reload() {
         webView.reload()
     }
-    
+
     public func setRefreshInterval(_ refreshInterval: Int) {
         ChartIQView.refreshInterval = refreshInterval
     }
-    
+
     public func setVoiceoverFields(_ voiceoverFields: [String: Bool]) {
         ChartIQView.voiceoverFields = voiceoverFields;
     }
-    
+
     // MARK: - Layout
-    
+
     /// setup WKWebView
     internal func setupWebView() {
         //guard ChartIQView.isValidApiKey else { return }
-        
+
         // Create the user content controller and add the script to it
         let userContentController = WKUserContentController()
-        
+
         userContentController.addUserScript(layoutScript)
         userContentController.addUserScript(drawingScript)
         userContentController.addUserScript(observeStudyDeletion)
-        
+
         for callbackMessage in ChartIQCallbackMessage.allCases {
             userContentController.add(self, name: callbackMessage.rawValue)
         }
-        
-        
+
+
         // Create the configuration with the user content controller
         let configuration = WKWebViewConfiguration()
         configuration.userContentController = userContentController
-        
+
         // Create the web view with the configuration
         webView = WKWebView(frame: bounds, configuration: configuration)
         webView.navigationDelegate = self
-        
+
         webView.isOpaque = false
         webView.backgroundColor = UIColor.clear
         //        webView.scrollView.backgroundColor = UIColor.green
-        
+
         addSubview(webView)
         setupConstraints()
-        
+
         //        if let url = URL(string: ChartIQView.chartIQUrl) {
         //            webView.load(URLRequest(url: url))
         //            addEvent("_ROKO.Active User")
         //        }
     }
-    
+
     /// Setup constraints
     internal func setupConstraints() {
         webView.translatesAutoresizingMaskIntoConstraints = false
@@ -755,9 +755,9 @@ public class ChartIQView: UIView {
         webView.topAnchor.constraint(
             equalTo: topAnchor).isActive = true
     }
-    
+
     // MARK: - Chart Control
-    
+
     /// Sets the data method to "push" or "pull".
     ///
     /// - Parameter method: The data method
@@ -775,7 +775,7 @@ public class ChartIQView: UIView {
             xmEvaluateJavascript(script, completionHandler: nil)
         }
     }
-    
+
     /// Sets the base chart type to "line", "candle", "bar", "wave", “colored_bar”, "colored_line", “hollow_candle”,"volume_candle",”scatterplot”, "baseline_delta", "baseline_delta_mountain", "mountain", "colored_mountain"
     ///
     /// - Parameter type: The chart type
@@ -801,7 +801,7 @@ public class ChartIQView: UIView {
         addEvent("CHIQ_setChartType", parameters: ["chartType": chartType])
         addEvent("CHIQ_setAggregationType", parameters: ["aggregationType": ""])
     }
-    
+
     /// Sets the base aggregation type to "rangebars", "ohlc", "kagi", "pandf", "heikinashi", "linebreak", "renko".
     ///
     /// - Parameter type: The aggregation type
@@ -821,7 +821,7 @@ public class ChartIQView: UIView {
         addEvent("CHIQ_setAggregationType", parameters: ["aggregationType": aggregationType])
         addEvent("CHIQ_setChartType", parameters: ["chartType": "candle"])
     }
-    
+
     /// Sets the periodicity and interval for the chart. Interval describes the raw data interval (1, 5, 30, "day") while period describes the multiple of that interval (7 minutes, 3 days, 7 X 5 minutes). This method sets the new periodicity and creates a new dataSet.
     ///
     /// - Parameters:
@@ -836,7 +836,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript("setPeriodicity(\(period), \(_interval), \"\(timeUnit)\");", completionHandler: nil)
         addEvent("CHIQ_setPeriodicity", parameters: ["period": String(period), "interval": interval])
     }
-    
+
     /// Renders a chart for a particular instrument from the data passed in or fetches new data from the attached CIQ.QuoteFeed. This is the method that should be called every time a new chart needs to be drawn for a different instrument.
     ///
     /// - Parameters:
@@ -846,12 +846,12 @@ public class ChartIQView: UIView {
             let source = "accessibilityMode();"
             xmEvaluateJavascript(source, completionHandler: nil)
         }
-        
+
         let script = "callNewChart(\"\(symbol)\");"
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setSymbol", parameters: ["symbol": symbol])
     }
-    
+
     /*! Renders a chart for a particular instrument and periodicity. This is the method that should be called every time a new chart needs to be drawn for a different instrument.
      @param symbol The symbol for the new chart.
      @param period: The number of elements from masterData to roll-up together into one data point on the chart (one candle, for example). If set to 30 in a candle chart, for example, each candle will represent 30 raw elements of interval type.
@@ -864,7 +864,7 @@ public class ChartIQView: UIView {
         """
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /*! Sets the webpage contents and base URL.
      @param string The string to use as the contents of the webpage.
      @param baseURL A URL that is used to resolve relative URLs within the document.
@@ -873,7 +873,7 @@ public class ChartIQView: UIView {
     public func xm_load(htmlString: String, baseURL: URL?) {
         webView.loadHTMLString(htmlString, baseURL: baseURL)
     }
-    
+
     /// Sets the timezone on which chart data are displayed
     ///
     /// - Parameters:
@@ -882,7 +882,7 @@ public class ChartIQView: UIView {
         let script = "setDisplayedDataTimezone(\"\(timezoneIANAIdentifier)\");"
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Used to add a Drawing to the Chart, in Edit Mode
     ///
     /// - Parameters:
@@ -891,7 +891,7 @@ public class ChartIQView: UIView {
         let script = "addDrawing(\"\(name)\")";
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Used to edit a Drawing to the Chart, If its not in the visible area will scroll to its position
     ///
     /// - Parameters:
@@ -900,7 +900,7 @@ public class ChartIQView: UIView {
         let script = "editDrawing(\(id))";
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Used to remove a Drawing to the Chart, If its not in the visible area will be just removed
     ///
     /// - Parameters:
@@ -909,19 +909,31 @@ public class ChartIQView: UIView {
         let script = "removeDrawing(\(id))";
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Used to invoke Javascript code for debugging
     public func xm_doSomething() {
         let script = "doSomething()";
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Used to print debug info in Javascript console
     public func xm_printSomething(text: String) {
         let script = "printSomething(\"\(text)\")";
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
+    /// Used to disable webView scrolling
+    public func xm_disableWebViewScrolling() {
+        let script = "stxx.allowScroll = false"
+        xmEvaluateJavascript(script, completionHandler: nil)
+    }
+
+    /// Used to enable webView scrolling
+    public func xm_enableWebViewScrolling() {
+        let script = "stxx.allowScroll = true"
+        xmEvaluateJavascript(script, completionHandler: nil)
+    }
+
     /// Used to show all the hidden Studies from the chart.
     public func showStudies() {
         let script = "showStudies()";
@@ -942,7 +954,7 @@ public class ChartIQView: UIView {
         let script = "hideDrawings()";
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Displays or not the chart objects like Drawings and Studies all together.
     ///
     /// - Parameters:
@@ -951,7 +963,7 @@ public class ChartIQView: UIView {
         let script = "displayChartComponents(\(show))"
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Renders a chart for a particular instrument from the data passed in or fetches new data from the attached CIQ.QuoteFeed. This is the method that should be called every time a new chart needs to be drawn for a different instrument.
     ///
     /// - Parameters:
@@ -962,7 +974,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setSymbolObject", parameters: ["symbolObject.symbol": object.symbol])
     }
-    
+
     /// Adds a symbol comparison to the chart.
     ///
     /// - Parameters:
@@ -970,11 +982,11 @@ public class ChartIQView: UIView {
     ///   - color: Color to draw line
     public func addComparisonSymbol(_ symbol: String, color: UIColor = UIColor.red) {
         let addSeriesScript = "stxx.addSeries(\"\(symbol)\", {display:\"\(symbol)\", color: \"\(color.toHexString())\"  isComparison:true});"
-        
+
         xmEvaluateJavascript(addSeriesScript, completionHandler: nil)
         addEvent("CHIQ_addComparison", parameters: ["symbol": symbol])
     }
-    
+
     /// Removes a symbol comparison from the chart.
     ///
     /// - Parameter symbol: The symbol for the new chart - a symbol string
@@ -983,7 +995,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_removeComparison", parameters: ["symbol": symbol])
     }
-    
+
     /// Sets the chart scale.
     ///
     /// - Parameter scale: The chart scale
@@ -997,7 +1009,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setChartScale", parameters: ["scale": scaleString])
     }
-    
+
     /// Change a css style on the chart.
     ///
     /// - Parameters:
@@ -1009,7 +1021,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_changeChartStyle", parameters: ["obj": obj, "attribute": attribute, "value": value])
     }
-    
+
     /// Change theme(night/day)
     ///
     /// - Parameters:
@@ -1023,10 +1035,10 @@ public class ChartIQView: UIView {
             script = "$('body').removeClass('ciq-night'); $('body').addClass('ciq-day');"
         }
         script += "stxx.clearStyles();"
-        
+
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Set watermark
     ///
     /// - Parameters:
@@ -1039,10 +1051,10 @@ public class ChartIQView: UIView {
         case false:
             script = "setWatermark(false);"
         }
-        
+
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Set decimal places
     ///
     /// - Parameters:
@@ -1051,7 +1063,7 @@ public class ChartIQView: UIView {
         let script = "stxx.chart.yAxis.decimalPlaces=\(decimalPlaces);"
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Change a property value on the chart
     ///
     /// - Parameters:
@@ -1062,7 +1074,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_changeChartProperty", parameters: ["property": property, "value": value as! String])
     }
-    
+
     /// get a property value on the chart
     ///
     /// - Parameters:
@@ -1072,7 +1084,7 @@ public class ChartIQView: UIView {
         addEvent("CHIQ_getChartProperty", parameters: ["property": property])
         return webView.evaluateJavaScriptWithReturn(script)!
     }
-    
+
     /// Change a property value on the chart engine
     ///
     /// - Parameters:
@@ -1083,7 +1095,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_changeEngineProperty", parameters: ["property": property, "value": value as! String])
     }
-    
+
     // get a property value on the chart engine
     ///
     /// - Parameters:
@@ -1093,21 +1105,21 @@ public class ChartIQView: UIView {
         addEvent("CHIQ_getEngineProperty", parameters: ["property": property])
         return webView.evaluateJavaScriptWithReturn(script)!
     }
-    
+
     /// Turns crosshairs on
     public func enableCrosshairs() {
         let script = "enableCrosshair();"
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_enableCrosshairs")
     }
-    
+
     /// Turns crosshairs off
     public func disableCrosshairs() {
         let script = "disableCrosshair();"
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_disableCrosshairs")
     }
-    
+
     /// Checks if crosshairs is on
     ///
     /// - Returns: true if crosshair is on
@@ -1115,7 +1127,7 @@ public class ChartIQView: UIView {
         let script = "if (stxx.layout.crosshair == true) { \"true\" } else { \"false\" } "
         return webView.evaluateJavaScriptWithReturn(script) == "true"
     }
-    
+
     /// Gets crosshair highlighted price data for HUD
     public func getCrosshairsHUDDetail() -> CrosshairHUD? {
         let script = "getHudDetails();"
@@ -1128,7 +1140,7 @@ public class ChartIQView: UIView {
         }
         return nil
     }
-    
+
     /// Sets the theme for the chart
     /// 'none' is there if the user wants to use custom themes they created
     /// valid values: day, night, none
@@ -1136,20 +1148,20 @@ public class ChartIQView: UIView {
     public func setTheme(_ theme: String) {
         xmEvaluateJavascript("setTheme(\"\(theme)\");")
     }
-    
+
     public func resizeChart() {
         xmEvaluateJavascript("resizeScreen();", completionHandler: nil)
     }
-    
+
     /// Clears out a chart, eliminating all references including the resizeTimer, quoteDriver, styles and eventListeners
     public func clear() {
         let script = "stxx.destroy();"
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_clearChart")
     }
-    
+
     // MARK: - Set Chart data
-    
+
     /// Sets the chart data by push.
     ///
     /// - Parameters:
@@ -1164,7 +1176,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         //        addEvent("CHIQ_pushInitialData", parameters: ["symbol": symbol, "data": jsonString!])
     }
-    
+
     /// Uses this method to stream OHLC data into a chart.
     ///
     /// - Parameter data: An array of properly formatted OHLC quote objects to append
@@ -1176,7 +1188,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         //        addEvent("CHIQ_pushUpdate", parameters: ["symbol": symbol, "data": jsonString])
     }
-    
+
     /// Uses this method to enable ask price line in chart.
     ///
     /// - Parameter shouldShow: A boolean value from settings to see if ask price should be shown.
@@ -1187,7 +1199,7 @@ public class ChartIQView: UIView {
         """
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Uses this method to feed the chart with the ask price
     ///
     /// - Parameter askPrice: A double value of the Ask price which we are going to
@@ -1199,9 +1211,9 @@ public class ChartIQView: UIView {
         """
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     // MARK: - Study
-    
+
     /// Gets all of the available studies.
     fileprivate func getStudyObjects(completionHandler: @escaping () -> Void) {
         let script = "JSON.stringify(getStudyList());"
@@ -1221,13 +1233,13 @@ public class ChartIQView: UIView {
             completionHandler()
         }
     }
-    
+
     /// Gets all of the available studies.
     public func getStudyList() -> [Study] {
         addEvent("CHIQ_getStudyList")
         return studyObjects
     }
-    
+
     /// Gets study input parameters.
     ///
     /// - Parameter name: The study name
@@ -1247,7 +1259,7 @@ public class ChartIQView: UIView {
         }
         return nil
     }
-    
+
     /// Gets study output parameters.
     ///
     /// - Parameter name: The study name
@@ -1265,7 +1277,7 @@ public class ChartIQView: UIView {
         }
         return nil
     }
-    
+
     /// Gets study 'parameters' parameters
     ///
     /// - Parameter name: The study name
@@ -1283,7 +1295,7 @@ public class ChartIQView: UIView {
         }
         return nil
     }
-    
+
     /// Sets study parameters.
     ///
     /// - Parameters:
@@ -1295,7 +1307,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setStudyParameter", parameters: ["parameter": key, "value": value])
     }
-    
+
     /// Sets study parameters.
     ///
     /// - Parameters:
@@ -1307,17 +1319,17 @@ public class ChartIQView: UIView {
             "var isFound = false; " +
             "var newInputParameters = {}; " +
         "var newOutputParameters = {}; "
-        
+
         parameters.forEach { (parameter) in
             script += getUpdateStudyParametersScript(parameter: parameter.key, value: parameter.value)
             addEvent("CHIQ_setStudyParameter", parameters: ["parameter": parameter.key, "value": parameter.value])
         }
-        
+
         script += "helper.updateStudy({inputs:newInputParameters, outputs:newOutputParameters}); "
-        
+
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Adds study on the Chart.
     ///
     /// - Parameters:
@@ -1344,16 +1356,16 @@ public class ChartIQView: UIView {
                 throw ChartIQStudyError.invalidOutput
             }
         }
-        
+
         if (studyObjects.filter{ $0.shortName == name }).isEmpty {
             throw ChartIQStudyError.studyNotFound
         }
-        
+
         let script = "addStudy('\(name)', \(_inputs), \(_outputs));"
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_addStudy", parameters: ["studyName": name])
     }
-    
+
     /// Removes study from the Chart.
     ///
     /// - Parameter name: The study name
@@ -1362,17 +1374,17 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_removeStudy")
     }
-    
+
     /// Remove all studies from the Chart.
     public func removeAllStudies() {
         let script = "removeAllStudies();"
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Lists studies added on the Chart.
     ///
     /// - Returns: The array of Study name
-    
+
     // abstract and maybe refactor
     public func getAddedStudyList() -> [Study] {
         var addedStudy = [Study]()
@@ -1409,23 +1421,23 @@ public class ChartIQView: UIView {
         }
         return addedStudy
     }
-    
+
     // MARK: - Drawing
-    
+
     public func exportDrawingObjects() -> Any? {
         let script = "JSON.stringify(stxx.exportDrawings())"
-        
+
         if let jsonString = webView.evaluateJavaScriptWithReturn(script), let data = jsonString.data(using: .utf8) {
             return try? JSONSerialization.jsonObject(with: data, options: [])
         }
         return nil
     }
-    
+
     public func importDrawings(_ jsonString: String) {
         let script = "stxx.importXMDrawings(\(jsonString)); stxx.draw();"
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Gets current draw tool
     public func getCurrentDrawTool() -> ChartIQDrawingTool? {
         let name = webView.evaluateJavaScriptWithReturn("currentDrawing")
@@ -1436,7 +1448,7 @@ public class ChartIQView: UIView {
         }
         return nil
     }
-    
+
     /// Gets draw tool name
     internal func getDrawToolName(for tool: ChartIQDrawingTool) -> String {
         switch tool {
@@ -1459,7 +1471,7 @@ public class ChartIQView: UIView {
         case .verticalLine: return "vertical"
         }
     }
-    
+
     /// Check if the drawing is supporting fill
     ///
     /// - Parameter tool: The draw tool
@@ -1469,7 +1481,7 @@ public class ChartIQView: UIView {
         default: return false
         }
     }
-    
+
     /// Check if the drawing is supporting pattern
     ///
     /// - Parameter tool: The draw tool
@@ -1479,7 +1491,7 @@ public class ChartIQView: UIView {
         default: return true
         }
     }
-    
+
     /// Enables drawing on the chart.
     ///
     /// - Parameter type: The drawing tool
@@ -1490,7 +1502,7 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_enableDrawing")
     }
-    
+
     /// Gets the input parameters for a drawing
     public func getDrawingParameters() -> Any? {
         if let tool = getCurrentDrawTool() {
@@ -1502,7 +1514,7 @@ public class ChartIQView: UIView {
         }
         return nil
     }
-    
+
     /// Sets drawing parameters on the chart.
     ///
     /// - Parameters:
@@ -1514,53 +1526,53 @@ public class ChartIQView: UIView {
         xmEvaluateJavascript(script, completionHandler: nil)
         addEvent("CHIQ_setDrawingParameter", parameters: ["parameter": key, "value": String(describing: value)])
     }
-    
+
     /// Disables drawing on the chart.
     public func disableDrawing() {
         let script = "stxx.changeVectorType(null); " +
         "currentDrawing = \"\" ; "
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Clears drawing on the chart.
     public func clearDrawing() {
         let script = "stxx.clearDrawings();"
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     public func invoke(functionName: String, args: Any...) -> Any {
         let jsonData = try! JSONSerialization.data(withJSONObject: args, options: .prettyPrinted)
         let json = String(data: jsonData, encoding: .utf8)?.replacingOccurrences(of: "\n", with: "") ?? ""
-        
+
         let script = "stxx.\(functionName)(\(json));"
         let value = webView.evaluateJavaScriptWithReturn(script)
         var result = ""
-        
+
         if value != nil {
             result = unwrapOptional(any: value as Any) as! String
         }
         return result
     }
-    
+
     public func unwrapOptional(any:Any) -> Any {
         let mi = Mirror(reflecting: any)
         if mi.displayStyle != .optional {
             return any
         }
-        
+
         if mi.children.count == 0 { return NSNull() }
         let (_, some) = mi.children.first!
         return some
     }
-    
+
     // MARK: - Private
-    
+
     /// Uses this method to load the default ChartIQView setting
     fileprivate func loadDefaultSetting() {
         let script = "stxx.layout.chartScale = \"log\";"
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Uses this method to generate the javascript of updating study parameter
     ///
     /// - Parameters:
@@ -1593,7 +1605,7 @@ public class ChartIQView: UIView {
         "isFound = false;"
         return updateParametersScript
     }
-    
+
     /// Uses this method to generate the javascript of getting study descriptor
     ///
     /// - Parameter name: The name of study descriptor
@@ -1607,7 +1619,7 @@ public class ChartIQView: UIView {
         "if (sd.name === \"\(name)\") { selectedSd = sd; }} "
         return script
     }
-    
+
     /// Uses this method to pass the array of ChartIQData to js and ask the chart to update
     ///
     /// - Parameters:
@@ -1619,7 +1631,7 @@ public class ChartIQView: UIView {
         let script = "parseData('\(json)', \"\(cb)\");"
         xmEvaluateJavascript(script, completionHandler: nil)
     }
-    
+
     /// Uses this method to format object to printed JSON format
     ///
     /// - Parameter object: The object
@@ -1629,13 +1641,13 @@ public class ChartIQView: UIView {
         let jsonString = String(data: jsonData, encoding: .utf8)
         return jsonString ?? ""
     }
-    
+
 }
 
 // MARK: - WKScriptMessageHandler
 
 extension ChartIQView: WKScriptMessageHandler {
-    
+
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let callbackMessage = ChartIQCallbackMessage(rawValue: message.name) else { return }
         switch callbackMessage {
@@ -1715,7 +1727,7 @@ extension ChartIQView: WKScriptMessageHandler {
         case .accessibility:
             if let quote = message.body as? String {
                 let fieldsArray = quote.components(separatedBy: "||")
-                
+
                 if fieldsArray.count == 6 {
                     let date = fieldsArray[0]
                     let close = fieldsArray[1]
@@ -1723,36 +1735,36 @@ extension ChartIQView: WKScriptMessageHandler {
                     let high = fieldsArray[3]
                     let low = fieldsArray[4]
                     let volume = fieldsArray[5]
-                    
+
                     // the below is very clunky, find a better way in the future
                     // maybe first idea of passing in fields to library instead
                     // of getting everything back
                     var selectedFields = ""
-                    
+
                     if ChartIQView.voiceoverFields[ChartIQQuoteFields.date.rawValue]! {
                         selectedFields += ", " + date
                     }
-                    
+
                     if ChartIQView.voiceoverFields[ChartIQQuoteFields.close.rawValue]! {
                         selectedFields += ", " + close
                     }
-                    
+
                     if ChartIQView.voiceoverFields[ChartIQQuoteFields.open.rawValue]! {
                         selectedFields += ", " + open
                     }
-                    
+
                     if ChartIQView.voiceoverFields[ChartIQQuoteFields.high.rawValue]! {
                         selectedFields += ", " + high
                     }
-                    
+
                     if ChartIQView.voiceoverFields[ChartIQQuoteFields.low.rawValue]! {
                         selectedFields += ", " + low
                     }
-                    
+
                     if ChartIQView.voiceoverFields[ChartIQQuoteFields.volume.rawValue]! {
                         selectedFields += ", " + volume
                     }
-                    
+
                     UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: selectedFields);
                 } else {
                     // field is missing, just quote the entire value
@@ -1778,7 +1790,7 @@ extension ChartIQView: WKScriptMessageHandler {
             default:
                 msg = "Could not extract arguments"
             }
-            
+
             NSLog("%@: %@", method, msg)
             print("\(method) \(msg)")
             if method == "ERROR" {
@@ -1846,21 +1858,21 @@ extension ChartIQView: WKScriptMessageHandler {
                     return
             }
             delegate?.chartIQView(self, didUpdateHeight: chartHeight)
-        case .touchStartedOnYAxis:
-            delegate?.chartIQViewDidStartTouchOnYAxis(self)
-        case .touchEndedOnYAxis:
-            delegate?.chartIQViewDidEndTouchOnYAxis(self)
+        case .touchStartedOnPriceArea:
+            delegate?.chartIQViewDidStartTouchOnPriceArea(self)
+        case .touchEndedOPriceArea:
+            delegate?.chartIQViewDidEndTouchOnPriceArea(self)
         }
     }
 }
 
 extension ChartIQView : WKNavigationDelegate {
-    
+
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         loadingTracker = ChartLoadingTracker()
         loadingTracker?.delegate = self
     }
-    
+
     public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         guard let statusCode = (navigationResponse.response as? HTTPURLResponse)?.statusCode else {
             // if there's no http status code to act on, exit and allow navigation
@@ -1874,11 +1886,11 @@ extension ChartIQView : WKNavigationDelegate {
             decisionHandler(.allow)
         }
     }
-    
+
     public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         loadingTracker?.commit()
     }
-    
+
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         loadingTracker?.htmlLoaded()
         getStudyObjects(completionHandler: { [weak self] in
@@ -1890,17 +1902,17 @@ extension ChartIQView : WKNavigationDelegate {
             strongSelf.delegate?.chartIQViewDidFinishLoading(strongSelf)
         })
     }
-    
+
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         let loadingError = ChartLoadingError(url: chartIQUrl, type: .navigation(error))
         loadingTracker?.failed(with: loadingError)
     }
-    
+
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         let loadingError = ChartLoadingError(url: chartIQUrl, type: .provisionalNavigation(error))
         loadingTracker?.failed(with: loadingError)
     }
-    
+
     public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         contentProcessDidTerminateTotalErrors += 1
         let loadingError = ChartLoadingError(url: chartIQUrl, type: .contentProcessDidTerminate(retries: contentProcessDidTerminateTotalErrors))
@@ -1912,7 +1924,7 @@ extension ChartIQView: ChartLoadingTrackingDelegate {
     func chartDidFinishLoading(elapsedTimes: [ChartLoadingElapsedTime]) {
         loadingDelegate?.chartIQView(self, didFinishLoadingWithElapsedTimes: elapsedTimes)
     }
-    
+
     func chartDidFailLoadingWithError(_ error: ChartLoadingError, elapsedTimes: [ChartLoadingElapsedTime]) {
         loadingDelegate?.chartIQView(self, didFailLoadingWithError: error, elapsedTimes: elapsedTimes)
     }
@@ -1922,24 +1934,5 @@ extension ChartIQView {
     private func xmEvaluateJavascript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         guard !webView.isLoading else { return }
         webView.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
-    }
-}
-
-extension ChartIQView {
-    public func xm_disableWebViewScrolling() {
-        let jsDisableWebViewString = "stxx.allowScroll = false"
-        xmEvaluateJavascript(jsDisableWebViewString, completionHandler: { (_, error) in
-            if let error = error {
-                print("Error while disabling chart scrolling: \(error)")
-            }
-        })
-    }
-    public func xm_enableWebViewScrolling() {
-        let jsEnableWebViewString = "stxx.allowScroll = true"
-        xmEvaluateJavascript(jsEnableWebViewString, completionHandler: { (_, error) in
-            if let error = error {
-                print("Error while enabling chart scrolling: \(error)")
-            }
-        })
     }
 }
