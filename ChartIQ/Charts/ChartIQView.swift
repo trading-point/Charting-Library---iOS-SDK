@@ -160,13 +160,13 @@ public protocol ChartIQDelegate
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
-    @objc func chartIQViewDidStartTouchOnYAxis(_ chartIQView: ChartIQView)
+    @objc func chartIQViewDidStartTouchOnPriceArea(_ chartIQView: ChartIQView)
     
     /// Called when scroll or zoom of Y-AXIS ends in ChartIQ
     ///
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
-    @objc func chartIQViewDidEndTouchOnYAxis(_ chartIQView: ChartIQView)
+    @objc func chartIQViewDidEndTouchOnPriceArea(_ chartIQView: ChartIQView)
 }
 
 /// ChartIQ Custom XM Error Handler
@@ -447,8 +447,8 @@ public class ChartIQView: UIView {
         case loadingChartFailed = "loadingChartFailed"
         case loadingChartSuccess = "loadingChartSuccess"
         case chartHeight = "chartHeight"
-        case touchStartedOnYAxis = "touchStartedOnYAxis"
-        case touchEndedOnYAxis = "touchEndedOnYAxis"
+        case touchStartedOnPriceArea = "touchStartedOnYAxis"
+        case touchEndedOnPriceArea = "touchEndedOnYAxis"
     }
     
     internal static var isValidApiKey = false
@@ -919,6 +919,18 @@ public class ChartIQView: UIView {
     /// Used to print debug info in Javascript console
     public func xm_printSomething(text: String) {
         let script = "printSomething(\"\(text)\")";
+        xmEvaluateJavascript(script, completionHandler: nil)
+    }
+
+    /// Used to disable webView scrolling
+    public func xm_disableWebViewScrolling() {
+        let script = "stxx.allowScroll = false"
+        xmEvaluateJavascript(script, completionHandler: nil)
+    }
+
+    /// Used to enable webView scrolling
+    public func xm_enableWebViewScrolling() {
+        let script = "stxx.allowScroll = true"
         xmEvaluateJavascript(script, completionHandler: nil)
     }
     
@@ -1846,10 +1858,11 @@ extension ChartIQView: WKScriptMessageHandler {
                     return
             }
             delegate?.chartIQView(self, didUpdateHeight: chartHeight)
-        case .touchStartedOnYAxis:
-            delegate?.chartIQViewDidStartTouchOnYAxis(self)
-        case .touchEndedOnYAxis:
-            delegate?.chartIQViewDidEndTouchOnYAxis(self)
+        case .touchStartedOnPriceArea:
+            delegate?.chartIQViewDidStartTouchOnPriceArea(self)
+        case .touchEndedOnPriceArea:
+            delegate?.chartIQViewDidEndTouchOnPriceArea(self)
+
         }
     }
 }
@@ -1922,24 +1935,5 @@ extension ChartIQView {
     private func xmEvaluateJavascript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         guard !webView.isLoading else { return }
         webView.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
-    }
-}
-
-extension ChartIQView {
-    public func xm_disableWebViewScrolling() {
-        let jsDisableWebViewString = "stxx.allowScroll = false"
-        xmEvaluateJavascript(jsDisableWebViewString, completionHandler: { (_, error) in
-            if let error = error {
-                print("Error while disabling chart scrolling: \(error)")
-            }
-        })
-    }
-    public func xm_enableWebViewScrolling() {
-        let jsEnableWebViewString = "stxx.allowScroll = true"
-        xmEvaluateJavascript(jsEnableWebViewString, completionHandler: { (_, error) in
-            if let error = error {
-                print("Error while enabling chart scrolling: \(error)")
-            }
-        })
     }
 }
