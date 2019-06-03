@@ -74,6 +74,17 @@ public enum GetStudyObjectError: Error {
     case evaluateJSError(Error)
 }
 
+extension GetStudyObjectError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .evaluateJSError:
+            return "JS Evaluation Error"
+        case .failedDeserialization:
+            return "Deserialization failed"
+        }
+    }
+}
+
 public struct ChartLoadingError: Error {
     public enum `Type` {
         case navigation(Error)
@@ -105,8 +116,8 @@ extension ChartLoadingError: LocalizedError {
             return "content process terminated"
         case .internalError(let message):
             return "internal error \(message ?? "unknown")"
-        case .getStudyObjectsFailed:
-            return "getStudyObjects failed"
+        case .getStudyObjectsFailed(let error):
+            return "getStudyObjects failed \(error.errorDescription ?? "")"
         }
     }
 }
