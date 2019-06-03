@@ -69,17 +69,23 @@ extension Array where Element == ChartLoadingElapsedTime {
     }
 }
 
+public enum GetStudyObjectError: Error {
+    case failedDeserialization(Error)
+    case evaluateJSError(Error)
+}
+
 public struct ChartLoadingError: Error {
     public enum `Type` {
         case navigation(Error)
         case provisionalNavigation(Error)
         case contentProcessDidTerminate(retries: Int)
         case internalError(String?)
+        case getStudyObjectsFailed(GetStudyObjectError)
     }
     public let url: String
     public let chartVersion: String
     public let type: Type
-
+    
     // undefined until we communicate the chart version from the JS code
     init(url: String, chartVersion: String = "undefined", type: Type) {
         self.url = url
@@ -99,6 +105,8 @@ extension ChartLoadingError: LocalizedError {
             return "content process terminated"
         case .internalError(let message):
             return "internal error \(message ?? "unknown")"
+        case .getStudyObjectsFailed:
+            return "getStudyObjects failed"
         }
     }
 }

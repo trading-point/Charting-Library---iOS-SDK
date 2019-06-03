@@ -691,7 +691,7 @@ public class ChartIQView: UIView {
             webView.load(URLRequest(url: url))
         }
     }
-
+    
     public func reload() {
         webView.reload()
     }
@@ -1215,22 +1215,30 @@ public class ChartIQView: UIView {
     // MARK: - Study
     
     /// Gets all of the available studies.
-    fileprivate func getStudyObjects(completionHandler: @escaping () -> Void) {
-        let script = "JSON.stringify(getStudyList());"
-        xmEvaluateJavascript(script) { [weak self](result, error) in
-            guard let strongSelf = self else {
-                completionHandler()
+    fileprivate func getStudyObjects(completionHandler: @escaping (Result<[Study], ChartLoadingError>) -> Void) {
+        let script = "getStudyList();"
+        xmEvaluateJavascript(script) { [weak self] (result, error) in
+            guard let self = self else {
                 return
             }
-            strongSelf.studyObjects = [Study]()
-            if let result = result as? String, let data = result.data(using: .utf8) {
-                let json = try! JSONSerialization.jsonObject(with: data, options: [])
-                if let dict = json as? [[String: Any]] {
-                    strongSelf.studyObjects = dict.compactMap { Study(json: $0) }
-                    strongSelf.studyObjects.sort{ $0.name.localizedCaseInsensitiveCompare($1.name) == ComparisonResult.orderedAscending  }
-                }
+            if let getStudyError = error {
+                let studyLoadError = ChartLoadingError(url: self.chartIQUrl, type: .getStudyObjectsFailed(.evaluateJSError(getStudyError)))
+                completionHandler(.failure(studyLoadError))
             }
-            completionHandler()
+            
+            self.studyObjects = [Study]()
+            guard let result = result as? String,
+                let data = result.data(using: .utf8) else { return }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: [])
+                guard let dict = json as? [[String: Any]] else { return }
+                self.studyObjects = dict.compactMap { Study(json: $0) }
+                self.studyObjects.sort{ $0.name.localizedCaseInsensitiveCompare($1.name) == ComparisonResult.orderedAscending  }
+                completionHandler(.success(self.studyObjects))
+            } catch {
+                let studyLoadError = ChartLoadingError(url: self.chartIQUrl, type: .getStudyObjectsFailed(.failedDeserialization(error)))
+                completionHandler(.failure(studyLoadError))
+            }
         }
     }
     
@@ -1862,7 +1870,6 @@ extension ChartIQView: WKScriptMessageHandler {
             delegate?.chartIQViewDidStartTouchOnPriceArea(self)
         case .touchEndedOnPriceArea:
             delegate?.chartIQViewDidEndTouchOnPriceArea(self)
-
         }
     }
 }
@@ -1894,13 +1901,18 @@ extension ChartIQView : WKNavigationDelegate {
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         loadingTracker?.htmlLoaded()
-        getStudyObjects(completionHandler: { [weak self] in
-            guard let strongSelf = self else {
+        getStudyObjects(completionHandler: { [weak self] result in
+            guard let self = self else {
                 return
             }
-            strongSelf.loadDefaultSetting()
-            strongSelf.loadingTracker?.studiesLoaded()
-            strongSelf.delegate?.chartIQViewDidFinishLoading(strongSelf)
+            switch result {
+            case .success:
+                self.loadDefaultSetting()
+                self.loadingTracker?.studiesLoaded()
+                self.delegate?.chartIQViewDidFinishLoading(self)
+            case .failure:
+                self.webView.reload()
+            }
         })
     }
     
