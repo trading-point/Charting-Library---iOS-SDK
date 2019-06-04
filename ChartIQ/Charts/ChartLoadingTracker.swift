@@ -69,6 +69,22 @@ extension Array where Element == ChartLoadingElapsedTime {
     }
 }
 
+public enum JSFunctionEvaluatingError: Error {
+    case failedDeserialization(Error)
+    case evaluateJSError(Error)
+}
+
+extension JSFunctionEvaluatingError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .evaluateJSError(let error):
+            return "JS Evaluation Error with \(error.localizedDescription)"
+        case .failedDeserialization(let error):
+            return "Deserialization failed with \(error.localizedDescription)"
+        }
+    }
+}
+
 public struct ChartLoadingError: Error {
     public enum `Type` {
         case navigation(Error)
@@ -79,7 +95,7 @@ public struct ChartLoadingError: Error {
     public let url: String
     public let chartVersion: String
     public let type: Type
-
+    
     // undefined until we communicate the chart version from the JS code
     init(url: String, chartVersion: String = "undefined", type: Type) {
         self.url = url
