@@ -34,7 +34,7 @@ public protocol ChartIQLoadingDelegate: class {
     /// - Parameters:
     ///   - chartIQView: The ChartIQView Object
     ///   - error: The error that caused Studies not to load correctly.
-    func chartIQView(_ chartIQView: ChartIQView, didFailLoadingStudiesWithError error: GetStudyObjectError)
+    func chartIQView(_ chartIQView: ChartIQView, didFailEvaluatingJSFunctionWithError error: JSFunctionEvaluatingError)
 }
 
 @objc(ChartIQDataSource)
@@ -1222,7 +1222,7 @@ public class ChartIQView: UIView {
     // MARK: - Study
     
     /// Gets all of the available studies.
-    fileprivate func getStudyObjects(completionHandler: @escaping (GetStudyObjectError?) -> Void) {
+    fileprivate func getStudyObjects(completionHandler: @escaping (JSFunctionEvaluatingError?) -> Void) {
         let script = "JSON.stringify(getStudyList());"
         xmEvaluateJavascript(script) { [weak self] (result, error) in
             guard let self = self else {
@@ -1906,12 +1906,12 @@ extension ChartIQView : WKNavigationDelegate {
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         loadingTracker?.htmlLoaded()
-        getStudyObjects(completionHandler: { [weak self] result in
+        getStudyObjects(completionHandler: { [weak self] error in
             guard let self = self else {
                 return
             }
-            if let errorResult = result {
-                self.loadingDelegate?.chartIQView(self, didFailLoadingStudiesWithError: errorResult)
+            if let error = error {
+                self.loadingDelegate?.chartIQView(self, didFailEvaluatingJSFunctionWithError: error)
             }
             self.loadDefaultSetting()
             self.loadingTracker?.studiesLoaded()

@@ -69,18 +69,18 @@ extension Array where Element == ChartLoadingElapsedTime {
     }
 }
 
-public enum GetStudyObjectError: Error {
+public enum JSFunctionEvaluatingError: Error {
     case failedDeserialization(Error)
     case evaluateJSError(Error)
 }
 
-extension GetStudyObjectError: LocalizedError {
+extension JSFunctionEvaluatingError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .evaluateJSError:
-            return "JS Evaluation Error"
-        case .failedDeserialization:
-            return "Deserialization failed"
+        case .evaluateJSError(let error):
+            return "JS Evaluation Error with \(error.localizedDescription)"
+        case .failedDeserialization(let error):
+            return "Deserialization failed with \(error.localizedDescription)"
         }
     }
 }
@@ -91,7 +91,6 @@ public struct ChartLoadingError: Error {
         case provisionalNavigation(Error)
         case contentProcessDidTerminate(retries: Int)
         case internalError(String?)
-        case getStudyObjectsFailed(GetStudyObjectError)
     }
     public let url: String
     public let chartVersion: String
@@ -116,8 +115,6 @@ extension ChartLoadingError: LocalizedError {
             return "content process terminated"
         case .internalError(let message):
             return "internal error \(message ?? "unknown")"
-        case .getStudyObjectsFailed(let error):
-            return "getStudyObjects failed \(error.errorDescription ?? "")"
         }
     }
 }
