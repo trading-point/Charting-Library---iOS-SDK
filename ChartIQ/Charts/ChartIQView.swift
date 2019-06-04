@@ -28,6 +28,13 @@ public protocol ChartIQLoadingDelegate: class {
     ///   - elapsedTimes: The elapsed times for all loading stages up to when the error occurred
     ///   - url: The URL String that will load the chart
     func chartIQView(_ chartView: ChartIQView, didFailLoadingWithError error: ChartLoadingError, elapsedTimes: [ChartLoadingElapsedTime])
+    
+    /// Called when Studies fail to load in ChartIQ
+    ///
+    /// - Parameters:
+    ///   - chartIQView: The ChartIQView Object
+    ///   - error: The error that caused Studies not to load correctly.
+    func chartIQView(_ chartIQView: ChartIQView, didFailLoadingStudiesWithError error: GetStudyObjectError)
 }
 
 @objc(ChartIQDataSource)
@@ -1215,15 +1222,14 @@ public class ChartIQView: UIView {
     // MARK: - Study
     
     /// Gets all of the available studies.
-    fileprivate func getStudyObjects(completionHandler: @escaping (Result<[Study], ChartLoadingError>) -> Void) {
-        let script = "getStudyList();"
+    fileprivate func getStudyObjects(completionHandler: @escaping (GetStudyObjectError?) -> Void) {
+        let script = "JSON.stringify(getStudyList());"
         xmEvaluateJavascript(script) { [weak self] (result, error) in
             guard let self = self else {
                 return
             }
             if let getStudyError = error {
-                let studyLoadError = ChartLoadingError(url: self.chartIQUrl, type: .getStudyObjectsFailed(.evaluateJSError(getStudyError)))
-                completionHandler(.failure(studyLoadError))
+                completionHandler(.evaluateJSError(getStudyError))
             }
             
             self.studyObjects = [Study]()
@@ -1234,10 +1240,9 @@ public class ChartIQView: UIView {
                 guard let dict = json as? [[String: Any]] else { return }
                 self.studyObjects = dict.compactMap { Study(json: $0) }
                 self.studyObjects.sort{ $0.name.localizedCaseInsensitiveCompare($1.name) == ComparisonResult.orderedAscending  }
-                completionHandler(.success(self.studyObjects))
+                completionHandler(nil)
             } catch {
-                let studyLoadError = ChartLoadingError(url: self.chartIQUrl, type: .getStudyObjectsFailed(.failedDeserialization(error)))
-                completionHandler(.failure(studyLoadError))
+                completionHandler(.failedDeserialization(error))
             }
         }
     }
@@ -1905,14 +1910,12 @@ extension ChartIQView : WKNavigationDelegate {
             guard let self = self else {
                 return
             }
-            switch result {
-            case .success:
-                self.loadDefaultSetting()
-                self.loadingTracker?.studiesLoaded()
-                self.delegate?.chartIQViewDidFinishLoading(self)
-            case .failure:
-                self.webView.reload()
+            if let errorResult = result {
+                self.loadingDelegate?.chartIQView(self, didFailLoadingStudiesWithError: errorResult)
             }
+            self.loadDefaultSetting()
+            self.loadingTracker?.studiesLoaded()
+            self.delegate?.chartIQViewDidFinishLoading(self)
         })
     }
     

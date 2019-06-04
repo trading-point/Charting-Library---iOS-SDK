@@ -8,12 +8,6 @@
 
 import Foundation
 
-enum Result<Value, ResultError: Error> {
-    case success(Value)
-    case failure(ResultError)
-}
-extension Result: Equatable where Value: Equatable, ResultError: Equatable { }
-
 open class ChartUtils {
     
     fileprivate static let _defaultDateFormatter = DateFormatter()
