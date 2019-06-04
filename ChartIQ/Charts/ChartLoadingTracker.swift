@@ -70,17 +70,17 @@ extension Array where Element == ChartLoadingElapsedTime {
 }
 
 public enum JSFunctionEvaluatingError: Error {
-    case failedDeserialization(Error)
-    case evaluateJSError(Error)
+    case failedDeserialization(functionName: String, error: Error)
+    case evaluateJSError(functionName: String, error: Error)
 }
 
 extension JSFunctionEvaluatingError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .evaluateJSError(let error):
-            return "JS Evaluation Error with \(error.localizedDescription)"
-        case .failedDeserialization(let error):
-            return "Deserialization failed with \(error.localizedDescription)"
+        case .evaluateJSError(let functionName, let error):
+            return "JS Evaluation Error with \(error.localizedDescription) at function \(functionName)"
+        case .failedDeserialization(let functionName, let error):
+            return "Deserialization failed with \(error.localizedDescription) at function \(functionName)"
         }
     }
 }

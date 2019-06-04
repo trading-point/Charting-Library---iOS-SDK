@@ -1229,7 +1229,7 @@ public class ChartIQView: UIView {
                 return
             }
             if let getStudyError = error {
-                completionHandler(.evaluateJSError(getStudyError))
+                completionHandler(.evaluateJSError(functionName: script, error: getStudyError))
             }
             
             self.studyObjects = [Study]()
@@ -1242,7 +1242,7 @@ public class ChartIQView: UIView {
                 self.studyObjects.sort{ $0.name.localizedCaseInsensitiveCompare($1.name) == ComparisonResult.orderedAscending  }
                 completionHandler(nil)
             } catch {
-                completionHandler(.failedDeserialization(error))
+                completionHandler(.failedDeserialization(functionName: script, error: error))
             }
         }
     }
